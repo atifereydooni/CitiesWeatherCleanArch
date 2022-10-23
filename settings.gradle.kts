@@ -10,4 +10,5 @@ rootProject.name = ("VolvoCarsAssignment")
 include(
     ":app",
     ":core:navigation",
+    ":features:home",
 )
