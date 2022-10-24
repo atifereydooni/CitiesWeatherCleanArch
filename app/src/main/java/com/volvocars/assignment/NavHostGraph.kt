@@ -13,7 +13,7 @@ private fun composableDestinations(): Map<NavigationDestination, @Composable () 
     mapOf(
         HomeDestination to {
             val viewModel: HomeViewModel = hiltViewModel()
-            HomeScreen()
+            HomeScreen(viewModel)
         }
     )
 
