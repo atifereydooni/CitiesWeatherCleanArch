@@ -41,4 +41,5 @@ android {
 dependencies {
     implementation(project(Modules.navigationModule))
     implementation(project(Modules.homeModule))
+    implementation(project(Modules.detailsModule))
 }

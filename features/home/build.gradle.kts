@@ -5,6 +5,8 @@ plugins {
 }
 
 dependencies{
+    implementation(project(Modules.navigationModule))
+
     implementation(Dependencies.retrofit)
     implementation(Dependencies.interceptor)
     api(Dependencies.converter)

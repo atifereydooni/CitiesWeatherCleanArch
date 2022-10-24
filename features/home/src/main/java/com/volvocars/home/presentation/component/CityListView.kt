@@ -15,7 +15,10 @@ import androidx.compose.ui.unit.dp
 import com.volvocars.home.presentation.view.WeatherItemModel
 
 @Composable
-fun CityListView(weathersItems: List<WeatherItemModel>) {
+fun CityListView(
+    weathersItems: List<WeatherItemModel>,
+    onItemClickListener: (WeatherItemModel) -> Unit = {}
+) {
 
     Scaffold(
         topBar = {
@@ -32,7 +35,7 @@ fun CityListView(weathersItems: List<WeatherItemModel>) {
         ) {
             itemsIndexed(weathersItems) { _, item ->
                 WeatherItemView(item, onItemClickListener = {
-
+                    onItemClickListener(it)
                 })
             }
         }

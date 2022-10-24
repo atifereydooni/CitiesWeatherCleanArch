@@ -11,4 +11,5 @@ include(
     ":app",
     ":core:navigation",
     ":features:home",
+    ":features:details",
 )

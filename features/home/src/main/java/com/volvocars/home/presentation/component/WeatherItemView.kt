@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.volvocars.home.presentation.view.WeatherItemModel
 import com.volvocars.home.presentation.view.WeatherItemState
-import kotlin.math.roundToInt
 
 @Composable
 fun WeatherItemView(
@@ -50,7 +49,7 @@ fun WeatherItemView(
                         Text(
                             text = "${
                                 (itemData.data?.main?.temp?.minus(273.15)
-                                    ?.roundToInt())
+                                    ?.toInt())
                             } °C",
                             style = MaterialTheme.typography.h5,
                             modifier = Modifier

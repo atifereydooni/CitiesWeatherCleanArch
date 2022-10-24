@@ -6,14 +6,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.volvocars.home.presentation.HomeViewModel
 import com.volvocars.home.presentation.component.CityListView
+import com.volvocars.home.presentation.view.WeatherItemModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    onItemClickListener: (WeatherItemModel) -> Unit = {}
 ) {
     val cityItems by viewModel.cityItems.collectAsState()
 
     Scaffold {
-        CityListView(cityItems)
+        CityListView(cityItems, onItemClickListener)
     }
 }

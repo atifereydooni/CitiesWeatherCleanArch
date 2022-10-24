@@ -7,6 +7,8 @@ import com.volvocars.home.domain.usecase.CityWeatherRequestModel
 import com.volvocars.home.domain.usecase.CityWeatherUseCase
 import com.volvocars.home.presentation.view.WeatherItemModel
 import com.volvocars.home.presentation.view.WeatherItemState
+import com.volvocars.navigation.INavigationManager
+import com.volvocars.navigation.destinations.DetailsDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,6 +19,7 @@ const val keyAPi = "2119bbe90ee91f6c3171ce4ac9cae10a"
 @HiltViewModel
 class HomeViewModel
 @Inject constructor(
+    private val navigationManager: INavigationManager,
     private val cityWeatherUseCase: CityWeatherUseCase
 ) : BaseViewModel() {
 
@@ -77,6 +80,29 @@ class HomeViewModel
                         weatherItemModel
                     }
                 }
+        }
+    }
+
+    fun onItemClickListener(weatherItemModel: WeatherItemModel) {
+        viewModelScope.launch {
+            navigationManager.navigateTo(
+                DetailsDestination.createDetailsRoute(
+                    cityName = weatherItemModel.name,
+                    weather = weatherItemModel.data?.weather?.get(0)?.main!!,
+                    temperature = weatherItemModel.data?.main?.temp?.minus(273.15)?.toInt()
+                        .toString(),
+                    temperatureMin = weatherItemModel.data?.main?.tempMin?.minus(273.15)?.toInt()
+                        .toString(),
+                    temperatureMax = weatherItemModel.data?.main?.tempMax?.minus(273.15)?.toInt()
+                        .toString(),
+                    pressure = weatherItemModel.data?.main?.pressure
+                        .toString(),
+                    humidity = weatherItemModel.data?.main?.humidity
+                        .toString(),
+                    windSpeed = weatherItemModel.data?.wind?.speed
+                        .toString(),
+                    )
+            )
         }
     }
 
