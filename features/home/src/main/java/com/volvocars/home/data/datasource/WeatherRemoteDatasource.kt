@@ -5,6 +5,6 @@ import com.volvocars.home.domain.entity.WeatherResponseEntity
 
 interface WeatherRemoteDatasource {
 
-    suspend fun getCityWeather(cityName: String, apiKey: String): WeatherResponseEntity
+    suspend fun getCityWeather(cityName: String, apiKey: String): Result<WeatherResponseEntity>
 
 }
