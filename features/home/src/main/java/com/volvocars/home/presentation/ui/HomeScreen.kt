@@ -13,7 +13,7 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     onItemClickListener: (WeatherItemModel) -> Unit = {}
 ) {
-    val cityItems by viewModel.cityItems.collectAsState()
+    val cityItems by viewModel.cityItems.collectAsState(initial = emptyList())
 
     Scaffold {
         CityListView(cityItems, onItemClickListener)
