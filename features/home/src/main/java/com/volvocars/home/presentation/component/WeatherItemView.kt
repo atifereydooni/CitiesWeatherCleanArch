@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.volvocars.home.presentation.view.WeatherItemModel
@@ -21,7 +22,8 @@ fun WeatherItemView(
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .testTag(itemData.name),
         elevation = 2.dp,
         backgroundColor = MaterialTheme.colors.surface
     ) {

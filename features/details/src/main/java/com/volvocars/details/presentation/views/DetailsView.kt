@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.volvocars.details.presentation.navigation.DetailsNavigationModel
 
@@ -17,12 +18,13 @@ fun DetailsView(navigationModel: DetailsNavigationModel?) {
     Scaffold(
         topBar = {
             TopAppBar(
+                modifier = Modifier.testTag(TAG_TOOLBAR),
                 backgroundColor = MaterialTheme.colors.primary,
                 title = { Text(navigationModel?.cityName ?: "NON") }
             )
         }
     ) {
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(modifier = Modifier.padding(8.dp).testTag(TAG_DETAILS)) {
             Row {
                 Text(text = "Weather: ")
                 Text(text = navigationModel?.weather ?: "-")
@@ -60,3 +62,6 @@ fun DetailsView(navigationModel: DetailsNavigationModel?) {
         }
     }
 }
+
+const val TAG_TOOLBAR = "TagToolbar"
+const val TAG_DETAILS = "TagDetails"

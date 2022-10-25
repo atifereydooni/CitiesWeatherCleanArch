@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.volvocars.home.presentation.view.WeatherItemModel
 
@@ -23,6 +24,7 @@ fun CityListView(
     Scaffold(
         topBar = {
             TopAppBar(
+                modifier = Modifier.testTag(TAG_TOOLBAR),
                 backgroundColor = MaterialTheme.colors.primary,
                 title = { Text("City Weather") }
             )
@@ -31,7 +33,7 @@ fun CityListView(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().testTag(TAG_LIST)
         ) {
             itemsIndexed(weathersItems) { _, item ->
                 WeatherItemView(item, onItemClickListener = {
@@ -41,3 +43,6 @@ fun CityListView(
         }
     }
 }
+
+const val TAG_TOOLBAR = "TagToolbar"
+const val TAG_LIST = "TagList"
