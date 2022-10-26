@@ -30,7 +30,7 @@ class HomeViewModel
         initCityList()
     }
 
-    private fun initCityList() {
+    fun initCityList() {
         viewModelScope.launch {
             _cityItems.emit(
                 arrayListOf(
@@ -46,7 +46,7 @@ class HomeViewModel
         }
     }
 
-    private fun getWeathers() {
+    fun getWeathers() {
 
         removeAllJob()
 

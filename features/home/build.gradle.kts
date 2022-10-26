@@ -26,4 +26,10 @@ dependencies{
     androidTestImplementation(Dependencies.jUnit)
     androidTestImplementation(Dependencies.composeTest)
     androidTestImplementation(Dependencies.coreTesting)
+
+    testImplementation(Dependencies.jUnit)
+    testImplementation(Dependencies.coreTesting)
+    testImplementation(Dependencies.mockk)
+    testImplementation(Dependencies.coroutinesTest)
+
 }
