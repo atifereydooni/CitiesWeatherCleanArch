@@ -1,5 +1,6 @@
 package com.volvocars.home.presentation
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.viewModelScope
 import com.volvocars.home.base.BaseViewModel
 import com.volvocars.home.domain.usecase.CityModel
@@ -10,7 +11,7 @@ import com.volvocars.home.presentation.view.WeatherItemState
 import com.volvocars.navigation.INavigationManager
 import com.volvocars.navigation.destinations.DetailsDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,8 +24,9 @@ class HomeViewModel
     private val cityWeatherUseCase: CityWeatherUseCase
 ) : BaseViewModel() {
 
-    private val _cityItems = MutableStateFlow<List<WeatherItemModel>>(arrayListOf())
-    val cityItems: StateFlow<List<WeatherItemModel>> = _cityItems.asStateFlow()
+    private val _cityItems = mutableStateListOf<WeatherItemModel>()
+    private val tempCityItems = mutableListOf<WeatherItemModel>()
+    val cityItems: List<WeatherItemModel> = _cityItems
 
     init {
         initCityList()
@@ -32,8 +34,8 @@ class HomeViewModel
 
     fun initCityList() {
         viewModelScope.launch {
-            _cityItems.emit(
-                arrayListOf(
+            _cityItems.addAll(
+                mutableListOf(
                     WeatherItemModel("Gothenburg", WeatherItemState.Loading),
                     WeatherItemModel("Stockholm", WeatherItemState.Loading),
                     WeatherItemModel("Mountain View", WeatherItemState.Loading),
@@ -42,17 +44,18 @@ class HomeViewModel
                     WeatherItemModel("Berlin", WeatherItemState.Loading)
                 )
             )
+
             getWeathers()
         }
     }
 
     fun getWeathers() {
-
+        var counter = 0
         removeAllJob()
 
         track {
             val cities: ArrayList<CityModel> = arrayListOf<CityModel>().apply {
-                _cityItems.value.forEachIndexed { index, cityModel ->
+                _cityItems.forEachIndexed { index, cityModel ->
                     add(CityModel(index, cityModel.name))
                 }
             }
@@ -60,28 +63,34 @@ class HomeViewModel
 
             cityWeatherUseCase.executeAsync(cityWeatherRequestModel)
                 .collect { response ->
-                    _cityItems.getAndUpdate { weatherItemModel ->
-                        weatherItemModel.forEach { item ->
-                            if (item.name == response?.cityModel?.name) {
-                                item.data = response.weather
-                                item.state = WeatherItemState.Success
-                                item.icon =
-                                    if (item.data?.weather?.get(0)?.icon?.isNotEmpty() == true) {
-                                        "https://openweathermap.org/img/wn/${
-                                            item.data?.weather?.get(
-                                                0
-                                            )?.icon
-                                        }@2x.png"
-                                    } else {
-                                        null
-                                    }
-                            }
+                    _cityItems.forEach { item ->
+                        if (item.name == response?.cityModel?.name) {
+                            item.data = response.weather
+                            item.state = WeatherItemState.Success
+                            item.icon =
+                                if (item.data?.weather?.get(0)?.icon?.isNotEmpty() == true) {
+                                    "https://openweathermap.org/img/wn/${
+                                        item.data?.weather?.get(
+                                            0
+                                        )?.icon
+                                    }@2x.png"
+                                } else {
+                                    null
+                                }
+                            tempCityItems.add(item)
                         }
-                        weatherItemModel
+                    }
+                    counter++
+                    if (counter == 6) {
+                        _cityItems.clear()
+                        tempCityItems.forEach {
+                            _cityItems.add(it)
+                        }
                     }
                 }
         }
     }
+
 
     fun onItemClickListener(weatherItemModel: WeatherItemModel) {
         viewModelScope.launch {
@@ -101,7 +110,7 @@ class HomeViewModel
                         .toString(),
                     windSpeed = weatherItemModel.data?.wind?.speed
                         .toString(),
-                    )
+                )
             )
         }
     }

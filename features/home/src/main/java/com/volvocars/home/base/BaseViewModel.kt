@@ -12,7 +12,7 @@ open class BaseViewModel : ViewModel() {
     private val jobs = HashMap<String, Job>()
 
     fun track(jobName: String? = null, block: suspend CoroutineScope.() -> Unit) {
-        val job = viewModelScope.launch(context = Dispatchers.IO, block = block)
+        val job = viewModelScope.launch(context = Dispatchers.Main, block = block)
         jobs[jobName ?: job.hashCode().toString()] = job
     }
 
