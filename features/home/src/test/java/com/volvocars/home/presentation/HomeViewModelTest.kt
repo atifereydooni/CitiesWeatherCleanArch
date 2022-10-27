@@ -7,7 +7,6 @@ import com.volvocars.home.domain.usecase.CityModel
 import com.volvocars.home.domain.usecase.CityWeatherResponseModel
 import com.volvocars.home.domain.usecase.CityWeatherUseCase
 import com.volvocars.home.domain.usecase.WeatherUseCase
-import com.volvocars.home.presentation.view.WeatherItemModel
 import com.volvocars.home.presentation.view.WeatherItemState
 import com.volvocars.navigation.INavigationManager
 import io.mockk.MockKAnnotations
@@ -17,8 +16,6 @@ import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
@@ -56,7 +53,7 @@ class HomeViewModelTest {
 
     @Test
     fun initViewModelTest() {
-        assert(viewModel.cityItems.value.size == 6)
+        assert(viewModel.cityItems.size == 6)
     }
 
     @Test
@@ -83,10 +80,8 @@ class HomeViewModelTest {
 
             viewModel.getWeathers()
 
-            val results = mutableListOf<List<WeatherItemModel>>()
-            val job = launch(testCoroutineDispatcher) { viewModel.cityItems.toList(results) }
-            assert(results.first()[0].state == WeatherItemState.Success)
-            job.cancel()
+            assert(viewModel.cityItems.first().state == WeatherItemState.Success)
+
         }
     }
 }
